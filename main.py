@@ -1,6 +1,8 @@
+import time
 from turtle import Screen, Turtle
 from paddle import Paddle
 from ball import Ball
+from scoreboard import Scoreboard
 
 # Screen setup
 screen_width = 800
@@ -27,10 +29,24 @@ screen.onkey(right_paddle.down, "Down")
 # Ball setup
 ball = Ball()
 
+# scoreboard setup
+scoreboard = Scoreboard()
+
 
 game_is_on = True
 while game_is_on:
+    time.sleep(ball.move_speed)
     screen.update()
     ball.move()
+    if ball.ycor() > 290 or ball.ycor() < -290:
+        ball.bounce_y()
+    if ball.distance(right_paddle) < 50 and ball.xcor() > 320 or ball.distance(left_paddle) < 50 and ball.xcor() < - 320 :
+        ball.bounce_x()
+    if ball.xcor() > 400:
+        scoreboard.increase_score_left()
+        ball.reset_position()
+    if ball.xcor() < -400:
+        scoreboard.increase_score_right()
+        ball.reset_position()
 
 screen.exitonclick()
